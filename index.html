@@ -1,0 +1,641 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HP4 — Fitness & Performance</title>
+  <meta name="description" content="HP4 Gym — Where champions are forged. State-of-the-art equipment, elite trainers, and a community that pushes you beyond your limits." />
+
+  <!-- Tailwind CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Lucide Icons via CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --hp4-dark: #0a0a0b;
+      --hp4-dark-2: #131316;
+      --hp4-red: #e63946;
+      --hp4-red-bright: #ff2d4a;
+      --hp4-gold: #f4a261;
+    }
+
+    * { scroll-behavior: smooth; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background-color: var(--hp4-dark);
+      color: #f5f5f5;
+      overflow-x: hidden;
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      margin: 0;
+    }
+
+    /* Scroll-based reveal */
+    .reveal { opacity: 0; transform: translateY(60px); transition: opacity 0.9s cubic-bezier(0.16,1,0.3,1), transform 0.9s cubic-bezier(0.16,1,0.3,1); }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .reveal-left { opacity: 0; transform: translateX(-80px); transition: opacity 0.9s cubic-bezier(0.16,1,0.3,1), transform 0.9s cubic-bezier(0.16,1,0.3,1); }
+    .reveal-left.visible { opacity: 1; transform: translateX(0); }
+    .reveal-right { opacity: 0; transform: translateX(80px); transition: opacity 0.9s cubic-bezier(0.16,1,0.3,1), transform 0.9s cubic-bezier(0.16,1,0.3,1); }
+    .reveal-right.visible { opacity: 1; transform: translateX(0); }
+    .reveal-scale { opacity: 0; transform: scale(0.85); transition: opacity 0.9s cubic-bezier(0.16,1,0.3,1), transform 0.9s cubic-bezier(0.16,1,0.3,1); }
+    .reveal-scale.visible { opacity: 1; transform: scale(1); }
+
+    .delay-100 { transition-delay: 0.1s; }
+    .delay-200 { transition-delay: 0.2s; }
+    .delay-300 { transition-delay: 0.3s; }
+    .delay-400 { transition-delay: 0.4s; }
+    .delay-500 { transition-delay: 0.5s; }
+    .delay-700 { transition-delay: 0.7s; }
+
+    /* Hero text glow */
+    @keyframes glow-pulse {
+      0%,100% { text-shadow: 0 0 30px rgba(230,57,70,0.5), 0 0 60px rgba(230,57,70,0.2); }
+      50% { text-shadow: 0 0 40px rgba(230,57,70,0.8), 0 0 80px rgba(230,57,70,0.4); }
+    }
+    .hero-glow { animation: glow-pulse 4s ease-in-out infinite; }
+
+    /* Slide animation for gym gallery */
+    @keyframes slide-left { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+    .slide-track { display: flex; width: max-content; animation: slide-left 40s linear infinite; }
+    .slide-track:hover { animation-play-state: paused; }
+    .slide-track-reverse { display: flex; width: max-content; animation: slide-left 50s linear infinite reverse; }
+    .slide-track-reverse:hover { animation-play-state: paused; }
+
+    /* Parallax hero */
+    .parallax-bg { background-attachment: fixed; background-position: center; background-repeat: no-repeat; background-size: cover; }
+
+    /* Gradient text */
+    .gradient-text { background: linear-gradient(135deg, #e63946 0%, #f4a261 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+
+    /* Pulse ring */
+    @keyframes pulse-ring { 0% { transform: scale(0.95); opacity: 0.8; } 50% { transform: scale(1.05); opacity: 0.4; } 100% { transform: scale(0.95); opacity: 0.8; } }
+    .pulse-ring { animation: pulse-ring 3s ease-in-out infinite; }
+
+    /* Scroll indicator */
+    @keyframes scroll-bounce { 0%,100% { transform: translateY(0); opacity: 1; } 50% { transform: translateY(10px); opacity: 0.5; } }
+    .scroll-indicator { animation: scroll-bounce 2s ease-in-out infinite; }
+
+    /* Equipment card hover */
+    .equip-card { transition: transform 0.5s cubic-bezier(0.16,1,0.3,1), box-shadow 0.5s ease; }
+    .equip-card:hover { transform: translateY(-12px) scale(1.02); box-shadow: 0 30px 60px -15px rgba(230,57,70,0.4); }
+
+    /* Membership card */
+    .membership-card { transition: transform 0.5s cubic-bezier(0.16,1,0.3,1), border-color 0.4s ease; }
+    .membership-card:hover { transform: translateY(-8px); }
+
+    /* Custom scrollbar */
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { background: #0a0a0b; }
+    ::-webkit-scrollbar-thumb { background: #e63946; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #ff2d4a; }
+
+    /* Marquee text */
+    @keyframes marquee { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
+    .marquee-text { display: inline-block; animation: marquee 20s linear infinite; }
+
+    /* Section heading underline */
+    .heading-underline::after { content: ''; display: block; width: 80px; height: 4px; background: linear-gradient(90deg, #e63946, #f4a261); margin: 20px auto 0; border-radius: 2px; }
+    .heading-underline-left::after { content: ''; display: block; width: 80px; height: 4px; background: linear-gradient(90deg, #e63946, #f4a261); margin: 20px 0 0; border-radius: 2px; }
+
+    /* Trainer spotlight glow */
+    @keyframes spotlight-glow { 0%,100% { box-shadow: 0 0 40px rgba(230,57,70,0.3); } 50% { box-shadow: 0 0 60px rgba(230,57,70,0.5); } }
+    .spotlight-img { animation: spotlight-glow 4s ease-in-out infinite; }
+
+    @media (max-width: 768px) { .parallax-bg { background-attachment: scroll; } }
+
+    /* Lucide icon sizing helper */
+    [data-lucide] { display: inline-block; vertical-align: middle; }
+  </style>
+  <meta property="og:image" content="https://bolt.new/static/og_default.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content="https://bolt.new/static/og_default.png">
+</head>
+<body class="bg-[#0a0a0b] text-white">
+
+  <!-- ===== NAVBAR ===== -->
+  <nav id="navbar" class="fixed top-0 left-0 right-0 z-50 transition-all duration-500 py-5">
+    <div class="max-w-7xl mx-auto px-6 flex items-center justify-between">
+      <!-- Logo -->
+      <a href="#hero" class="flex items-center gap-2 group">
+        <div class="w-10 h-10 rounded-full bg-gradient-to-br from-[#e63946] to-[#f4a261] flex items-center justify-center transition-transform duration-300 group-hover:scale-110">
+          <i data-lucide="dumbbell" class="w-5 h-5 text-white"></i>
+        </div>
+        <span class="text-2xl font-extrabold tracking-tight text-white">HP<span class="text-[#e63946]">4</span></span>
+      </a>
+      <!-- Desktop links -->
+      <div class="hidden md:flex items-center gap-8">
+        <a href="#hero" class="text-sm font-medium text-gray-300 hover:text-[#e63946] transition-colors duration-300 relative group">Home<span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#e63946] transition-all duration-300 group-hover:w-full"></span></a>
+        <a href="#equipment" class="text-sm font-medium text-gray-300 hover:text-[#e63946] transition-colors duration-300 relative group">Equipment<span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#e63946] transition-all duration-300 group-hover:w-full"></span></a>
+        <a href="#gallery" class="text-sm font-medium text-gray-300 hover:text-[#e63946] transition-colors duration-300 relative group">Gallery<span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#e63946] transition-all duration-300 group-hover:w-full"></span></a>
+        <a href="#membership" class="text-sm font-medium text-gray-300 hover:text-[#e63946] transition-colors duration-300 relative group">Membership<span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#e63946] transition-all duration-300 group-hover:w-full"></span></a>
+        <a href="#trainers" class="text-sm font-medium text-gray-300 hover:text-[#e63946] transition-colors duration-300 relative group">Trainers<span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#e63946] transition-all duration-300 group-hover:w-full"></span></a>
+        <a href="#contact" class="text-sm font-medium text-gray-300 hover:text-[#e63946] transition-colors duration-300 relative group">Contact<span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#e63946] transition-all duration-300 group-hover:w-full"></span></a>
+        <a href="#membership" class="px-5 py-2.5 rounded-full bg-gradient-to-r from-[#e63946] to-[#ff2d4a] text-white text-sm font-semibold hover:shadow-lg hover:shadow-[#e63946]/40 transition-all duration-300 hover:scale-105">Join Now</a>
+      </div>
+      <!-- Mobile menu button -->
+      <button id="menuBtn" class="md:hidden text-white" aria-label="Toggle menu">
+        <i data-lucide="menu" class="w-6 h-6" id="menuIcon"></i>
+      </button>
+    </div>
+    <!-- Mobile menu -->
+    <div id="mobileMenu" class="hidden md:hidden absolute top-full left-0 right-0 bg-[#0a0a0b]/98 backdrop-blur-md border-t border-white/10">
+      <div class="flex flex-col gap-4 px-6 py-6">
+        <a href="#hero" class="mobile-link text-gray-300 hover:text-[#e63946] transition-colors font-medium">Home</a>
+        <a href="#equipment" class="mobile-link text-gray-300 hover:text-[#e63946] transition-colors font-medium">Equipment</a>
+        <a href="#gallery" class="mobile-link text-gray-300 hover:text-[#e63946] transition-colors font-medium">Gallery</a>
+        <a href="#membership" class="mobile-link text-gray-300 hover:text-[#e63946] transition-colors font-medium">Membership</a>
+        <a href="#trainers" class="mobile-link text-gray-300 hover:text-[#e63946] transition-colors font-medium">Trainers</a>
+        <a href="#contact" class="mobile-link text-gray-300 hover:text-[#e63946] transition-colors font-medium">Contact</a>
+        <a href="#membership" class="mobile-link px-5 py-2.5 rounded-full bg-gradient-to-r from-[#e63946] to-[#ff2d4a] text-white text-sm font-semibold text-center">Join Now</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ===== HERO ===== -->
+  <section id="hero" class="relative min-h-screen flex items-center justify-center overflow-hidden">
+    <div class="absolute inset-0 parallax-bg" style="background-image: url('https://images.pexels.com/photos/6388373/pexels-photo-6388373.jpeg?auto=compress&cs=tinysrgb&w=1920');"></div>
+    <div class="absolute inset-0 bg-gradient-to-b from-[#0a0a0b]/80 via-[#0a0a0b]/60 to-[#0a0a0b]"></div>
+    <div class="absolute inset-0 bg-[#0a0a0b]/40"></div>
+    <!-- Pulse ring -->
+    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none">
+      <div class="pulse-ring w-[300px] h-[300px] md:w-[500px] md:h-[500px] rounded-full border border-[#e63946]/30"></div>
+    </div>
+    <!-- Content -->
+    <div class="relative z-10 text-center px-6">
+      <!-- Logo emblem -->
+      <div class="reveal-scale inline-flex items-center justify-center mb-8">
+        <div class="relative">
+          <div class="w-28 h-28 md:w-36 md:h-36 rounded-full border-2 border-[#e63946]/40 flex items-center justify-center bg-[#0a0a0b]/60 backdrop-blur-sm">
+            <div class="w-20 h-20 md:w-28 md:h-28 rounded-full border border-[#e63946]/60 flex items-center justify-center">
+              <i data-lucide="dumbbell" class="w-10 h-10 md:w-14 md:h-14 text-[#e63946]"></i>
+            </div>
+          </div>
+          <div class="absolute top-0 left-1/2 w-3 h-3 rounded-full bg-[#f4a261] shadow-lg shadow-[#f4a261]/50" style="transform: translate(-50%, -50%);"></div>
+        </div>
+      </div>
+      <!-- Gym name -->
+      <h1 class="hero-glow text-7xl sm:text-8xl md:text-9xl font-extrabold tracking-tighter text-white mb-4">HP<span class="text-[#e63946]">4</span></h1>
+      <div class="reveal delay-200">
+        <p class="text-lg md:text-2xl text-gray-300 font-light tracking-widest uppercase mb-2">Fitness &amp; Performance</p>
+        <p class="text-sm md:text-base text-gray-400 max-w-xl mx-auto leading-relaxed">Where champions are forged. State-of-the-art equipment, elite trainers, and a community that pushes you beyond your limits.</p>
+      </div>
+      <div class="reveal delay-400 mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
+        <a href="#membership" class="px-8 py-3.5 rounded-full bg-gradient-to-r from-[#e63946] to-[#ff2d4a] text-white font-semibold hover:shadow-xl hover:shadow-[#e63946]/40 transition-all duration-300 hover:scale-105">Start Your Journey</a>
+        <a href="#equipment" class="px-8 py-3.5 rounded-full border border-white/20 text-white font-semibold hover:border-[#e63946] hover:text-[#e63946] transition-all duration-300">Explore More</a>
+      </div>
+    </div>
+    <!-- Scroll indicator -->
+    <div class="absolute bottom-8 left-1/2 -translate-x-1/2 scroll-indicator">
+      <i data-lucide="chevron-down" class="w-8 h-8 text-gray-400"></i>
+    </div>
+  </section>
+
+  <!-- ===== EQUIPMENT ===== -->
+  <section id="equipment" class="relative py-24 md:py-32 bg-[#0a0a0b]">
+    <!-- Marquee -->
+    <div class="overflow-hidden mb-16 border-y border-white/10 py-4">
+      <div class="marquee-text text-4xl md:text-6xl font-extrabold text-white/5 whitespace-nowrap">STRENGTH · CARDIO · FUNCTIONAL · POWER · STRENGTH · CARDIO · FUNCTIONAL · POWER ·</div>
+    </div>
+    <div class="max-w-7xl mx-auto px-6">
+      <div class="text-center mb-16">
+        <h2 class="reveal text-4xl md:text-6xl font-extrabold text-white heading-underline">Our <span class="gradient-text">Equipment</span></h2>
+        <p class="reveal delay-200 mt-6 text-gray-400 max-w-2xl mx-auto text-lg">Premium-grade machines and free weights curated for every training style — from hypertrophy to functional fitness.</p>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+        <!-- Card 1 -->
+        <div class="equip-card reveal-scale delay-100 group relative overflow-hidden rounded-2xl bg-[#131316] border border-white/5">
+          <div class="relative h-64 overflow-hidden">
+            <img src="https://images.pexels.com/photos/19025674/pexels-photo-19025674.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Free Weights" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy" />
+            <div class="absolute inset-0 bg-gradient-to-t from-[#131316] via-[#131316]/20 to-transparent"></div>
+            <div class="absolute top-4 left-4 w-12 h-12 rounded-xl bg-[#e63946]/90 backdrop-blur-sm flex items-center justify-center shadow-lg"><i data-lucide="dumbbell" class="w-6 h-6 text-white"></i></div>
+          </div>
+          <div class="p-6"><h3 class="text-xl font-bold text-white mb-2 group-hover:text-[#e63946] transition-colors">Free Weights</h3><p class="text-gray-400 text-sm">Full range of dumbbells from 2.5kg to 50kg</p></div>
+          <div class="h-1 w-0 group-hover:w-full bg-gradient-to-r from-[#e63946] to-[#f4a261] transition-all duration-500"></div>
+        </div>
+        <!-- Card 2 -->
+        <div class="equip-card reveal-scale delay-200 group relative overflow-hidden rounded-2xl bg-[#131316] border border-white/5">
+          <div class="relative h-64 overflow-hidden">
+            <img src="https://images.pexels.com/photos/12250460/pexels-photo-12250460.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Cardio Zone" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy" />
+            <div class="absolute inset-0 bg-gradient-to-t from-[#131316] via-[#131316]/20 to-transparent"></div>
+            <div class="absolute top-4 left-4 w-12 h-12 rounded-xl bg-[#e63946]/90 backdrop-blur-sm flex items-center justify-center shadow-lg"><i data-lucide="heart" class="w-6 h-6 text-white"></i></div>
+          </div>
+          <div class="p-6"><h3 class="text-xl font-bold text-white mb-2 group-hover:text-[#e63946] transition-colors">Cardio Zone</h3><p class="text-gray-400 text-sm">Treadmills, ellipticals &amp; cycling machines</p></div>
+          <div class="h-1 w-0 group-hover:w-full bg-gradient-to-r from-[#e63946] to-[#f4a261] transition-all duration-500"></div>
+        </div>
+        <!-- Card 3 -->
+        <div class="equip-card reveal-scale delay-300 group relative overflow-hidden rounded-2xl bg-[#131316] border border-white/5">
+          <div class="relative h-64 overflow-hidden">
+            <img src="https://images.pexels.com/photos/5327505/pexels-photo-5327505.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Cable Machines" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy" />
+            <div class="absolute inset-0 bg-gradient-to-t from-[#131316] via-[#131316]/20 to-transparent"></div>
+            <div class="absolute top-4 left-4 w-12 h-12 rounded-xl bg-[#e63946]/90 backdrop-blur-sm flex items-center justify-center shadow-lg"><i data-lucide="cog" class="w-6 h-6 text-white"></i></div>
+          </div>
+          <div class="p-6"><h3 class="text-xl font-bold text-white mb-2 group-hover:text-[#e63946] transition-colors">Cable Machines</h3><p class="text-gray-400 text-sm">Dual cable crossover &amp; pulley systems</p></div>
+          <div class="h-1 w-0 group-hover:w-full bg-gradient-to-r from-[#e63946] to-[#f4a261] transition-all duration-500"></div>
+        </div>
+        <!-- Card 4 -->
+        <div class="equip-card reveal-scale delay-100 group relative overflow-hidden rounded-2xl bg-[#131316] border border-white/5">
+          <div class="relative h-64 overflow-hidden">
+            <img src="https://images.pexels.com/photos/7187951/pexels-photo-7187951.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Functional Training" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy" />
+            <div class="absolute inset-0 bg-gradient-to-t from-[#131316] via-[#131316]/20 to-transparent"></div>
+            <div class="absolute top-4 left-4 w-12 h-12 rounded-xl bg-[#e63946]/90 backdrop-blur-sm flex items-center justify-center shadow-lg"><i data-lucide="zap" class="w-6 h-6 text-white"></i></div>
+          </div>
+          <div class="p-6"><h3 class="text-xl font-bold text-white mb-2 group-hover:text-[#e63946] transition-colors">Functional Training</h3><p class="text-gray-400 text-sm">Battle ropes, kettlebells &amp; plyo boxes</p></div>
+          <div class="h-1 w-0 group-hover:w-full bg-gradient-to-r from-[#e63946] to-[#f4a261] transition-all duration-500"></div>
+        </div>
+        <!-- Card 5 -->
+        <div class="equip-card reveal-scale delay-200 group relative overflow-hidden rounded-2xl bg-[#131316] border border-white/5">
+          <div class="relative h-64 overflow-hidden">
+            <img src="https://images.pexels.com/photos/1092877/pexels-photo-1092877.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Strength Rack" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy" />
+            <div class="absolute inset-0 bg-gradient-to-t from-[#131316] via-[#131316]/20 to-transparent"></div>
+            <div class="absolute top-4 left-4 w-12 h-12 rounded-xl bg-[#e63946]/90 backdrop-blur-sm flex items-center justify-center shadow-lg"><i data-lucide="dumbbell" class="w-6 h-6 text-white"></i></div>
+          </div>
+          <div class="p-6"><h3 class="text-xl font-bold text-white mb-2 group-hover:text-[#e63946] transition-colors">Strength Rack</h3><p class="text-gray-400 text-sm">Olympic lifting platforms &amp; power racks</p></div>
+          <div class="h-1 w-0 group-hover:w-full bg-gradient-to-r from-[#e63946] to-[#f4a261] transition-all duration-500"></div>
+        </div>
+        <!-- Card 6 -->
+        <div class="equip-card reveal-scale delay-300 group relative overflow-hidden rounded-2xl bg-[#131316] border border-white/5">
+          <div class="relative h-64 overflow-hidden">
+            <img src="https://images.pexels.com/photos/7187871/pexels-photo-7187871.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Conditioning" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy" />
+            <div class="absolute inset-0 bg-gradient-to-t from-[#131316] via-[#131316]/20 to-transparent"></div>
+            <div class="absolute top-4 left-4 w-12 h-12 rounded-xl bg-[#e63946]/90 backdrop-blur-sm flex items-center justify-center shadow-lg"><i data-lucide="zap" class="w-6 h-6 text-white"></i></div>
+          </div>
+          <div class="p-6"><h3 class="text-xl font-bold text-white mb-2 group-hover:text-[#e63946] transition-colors">Conditioning</h3><p class="text-gray-400 text-sm">Kettlebells, sleds &amp; mobility tools</p></div>
+          <div class="h-1 w-0 group-hover:w-full bg-gradient-to-r from-[#e63946] to-[#f4a261] transition-all duration-500"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== GALLERY SLIDER ===== -->
+  <section id="gallery" class="relative py-24 md:py-32 bg-[#0a0a0b] overflow-hidden">
+    <div class="max-w-7xl mx-auto px-6 text-center mb-16">
+      <h2 class="reveal text-4xl md:text-6xl font-extrabold text-white heading-underline">Inside <span class="gradient-text">HP4</span></h2>
+      <p class="reveal delay-200 mt-6 text-gray-400 max-w-2xl mx-auto text-lg">Step into a space built for performance. Every corner designed to fuel your ambition.</p>
+    </div>
+    <div class="space-y-6">
+      <!-- Row 1 -->
+      <div class="overflow-hidden">
+        <div class="slide-track gap-6" id="slideRow1"></div>
+      </div>
+      <!-- Row 2 -->
+      <div class="overflow-hidden">
+        <div class="slide-track-reverse gap-6" id="slideRow2"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== MEMBERSHIP ===== -->
+  <section id="membership" class="relative py-24 md:py-32 bg-gradient-to-b from-[#0a0a0b] via-[#131316] to-[#0a0a0b]">
+    <div class="max-w-7xl mx-auto px-6">
+      <div class="text-center mb-16">
+        <h2 class="reveal text-4xl md:text-6xl font-extrabold text-white heading-underline">Membership <span class="gradient-text">Plans</span></h2>
+        <p class="reveal delay-200 mt-6 text-gray-400 max-w-2xl mx-auto text-lg">Choose the plan that matches your goals. No hidden fees, no lock-in — just results.</p>
+      </div>
+      <!-- Cards -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-20">
+        <!-- Basic -->
+        <div class="membership-card reveal delay-100 relative rounded-3xl p-8 border-2 border-white/10 bg-[#131316]">
+          <div class="w-14 h-14 rounded-2xl flex items-center justify-center mb-6 bg-white/5"><i data-lucide="dumbbell" class="w-7 h-7 text-white"></i></div>
+          <h3 class="text-2xl font-bold text-white mb-2">Basic</h3>
+          <div class="flex items-end gap-1 mb-6"><span class="text-4xl font-extrabold text-white">₹1,500</span><span class="text-gray-400 text-sm mb-1">/month</span></div>
+          <ul class="space-y-3 mb-8">
+            <li class="flex items-start gap-3 text-sm text-gray-300"><i data-lucide="check" class="w-5 h-5 text-[#e63946] flex-shrink-0 mt-0.5"></i><span>Full gym floor access</span></li>
+            <li class="flex items-start gap-3 text-sm text-gray-300"><i data-lucide="check" class="w-5 h-5 text-[#e63946] flex-shrink-0 mt-0.5"></i><span>Locker room access</span></li>
+            <li class="flex items-start gap-3 text-sm text-gray-300"><i data-lucide="check" class="w-5 h-5 text-[#e63946] flex-shrink-0 mt-0.5"></i><span>2 group classes / week</span></li>
+            <li class="flex items-start gap-3 text-sm text-gray-300"><i data-lucide="check" class="w-5 h-5 text-[#e63946] flex-shrink-0 mt-0.5"></i><span>Fitness assessment</span></li>
+          </ul>
+          <a href="#contact" class="block text-center py-3 rounded-full font-semibold transition-all duration-300 border border-white/20 text-white hover:border-[#e63946] hover:text-[#e63946]">Get Started</a>
+        </div>
+        <!-- Premium -->
+        <div class="membership-card reveal delay-200 relative rounded-3xl p-8 border-2 border-[#e63946] bg-gradient-to-b from-[#e63946]/10 to-[#131316]">
+          <div class="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1.5 rounded-full bg-gradient-to-r from-[#e63946] to-[#ff2d4a] text-white text-xs font-bold tracking-wide">MOST POPULAR</div>
+          <div class="w-14 h-14 rounded-2xl flex items-center justify-center mb-6 bg-[#e63946]"><i data-lucide="zap" class="w-7 h-7 text-white"></i></div>
+          <h3 class="text-2xl font-bold text-white mb-2">Premium</h3>
+          <div class="flex items-end gap-1 mb-6"><span class="text-4xl font-extrabold text-white">₹2,500</span><span class="text-gray-400 text-sm mb-1">/month</span></div>
+          <ul class="space-y-3 mb-8">
+            <li class="flex items-start gap-3 text-sm text-gray-300"><i data-lucide="check" class="w-5 h-5 text-[#e63946] flex-shrink-0 mt-0.5"></i><span>Everything in Basic</span></li>
+            <li class="flex items-start gap-3 text-sm text-gray-300"><i data-lucide="check" class="w-5 h-5 text-[#e63946] flex-shrink-0 mt-0.5"></i><span>Unlimited group classes</span></li>
+            <li class="flex items-start gap-3 text-sm text-gray-300"><i data-lucide="check" class="w-5 h-5 text-[#e63946] flex-shrink-0 mt-0.5"></i><span>Personal training (2 sessions)</span></li>
+            <li class="flex items-start gap-3 text-sm text-gray-300"><i data-lucide="check" class="w-5 h-5 text-[#e63946] flex-shrink-0 mt-0.5"></i><span>Nutrition consultation</span></li>
+            <li class="flex items-start gap-3 text-sm text-gray-300"><i data-lucide="check" class="w-5 h-5 text-[#e63946] flex-shrink-0 mt-0.5"></i><span>Sauna &amp; steam access</span></li>
+          </ul>
+          <a href="#contact" class="block text-center py-3 rounded-full font-semibold transition-all duration-300 bg-gradient-to-r from-[#e63946] to-[#ff2d4a] text-white hover:shadow-lg hover:shadow-[#e63946]/40">Get Started</a>
+        </div>
+        <!-- Elite -->
+        <div class="membership-card reveal delay-300 relative rounded-3xl p-8 border-2 border-white/10 bg-[#131316]">
+          <div class="w-14 h-14 rounded-2xl flex items-center justify-center mb-6 bg-white/5"><i data-lucide="crown" class="w-7 h-7 text-white"></i></div>
+          <h3 class="text-2xl font-bold text-white mb-2">Elite</h3>
+          <div class="flex items-end gap-1 mb-6"><span class="text-4xl font-extrabold text-white">₹4,000</span><span class="text-gray-400 text-sm mb-1">/month</span></div>
+          <ul class="space-y-3 mb-8">
+            <li class="flex items-start gap-3 text-sm text-gray-300"><i data-lucide="check" class="w-5 h-5 text-[#e63946] flex-shrink-0 mt-0.5"></i><span>Everything in Premium</span></li>
+            <li class="flex items-start gap-3 text-sm text-gray-300"><i data-lucide="check" class="w-5 h-5 text-[#e63946] flex-shrink-0 mt-0.5"></i><span>Unlimited personal training</span></li>
+            <li class="flex items-start gap-3 text-sm text-gray-300"><i data-lucide="check" class="w-5 h-5 text-[#e63946] flex-shrink-0 mt-0.5"></i><span>Custom diet plan</span></li>
+            <li class="flex items-start gap-3 text-sm text-gray-300"><i data-lucide="check" class="w-5 h-5 text-[#e63946] flex-shrink-0 mt-0.5"></i><span>Priority booking</span></li>
+            <li class="flex items-start gap-3 text-sm text-gray-300"><i data-lucide="check" class="w-5 h-5 text-[#e63946] flex-shrink-0 mt-0.5"></i><span>Recovery zone access</span></li>
+          </ul>
+          <a href="#contact" class="block text-center py-3 rounded-full font-semibold transition-all duration-300 border border-white/20 text-white hover:border-[#e63946] hover:text-[#e63946]">Get Started</a>
+        </div>
+      </div>
+      <!-- Gym description -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-20">
+        <div class="reveal-left">
+          <h3 class="text-3xl md:text-4xl font-bold text-white mb-6 heading-underline-left">About <span class="gradient-text">HP4 Gym</span></h3>
+          <p class="text-gray-300 leading-relaxed mb-4">HP4 is more than a gym — it's a fitness ecosystem built for serious athletes and beginners alike. Spread across 8,000 sq ft, our facility houses international-grade equipment, dedicated zones for strength, cardio, and functional training, and a recovery lounge designed to help you perform at your peak.</p>
+          <p class="text-gray-400 leading-relaxed">Our certified trainers bring years of experience in bodybuilding, powerlifting, and sports conditioning. Whether your goal is fat loss, muscle gain, or athletic performance, we have the expertise and equipment to get you there.</p>
+        </div>
+        <div class="reveal-right grid grid-cols-2 gap-4">
+          <div class="space-y-4">
+            <div class="rounded-2xl overflow-hidden h-48"><img src="https://images.pexels.com/photos/1954588/pexels-photo-1954588.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Gym training" class="w-full h-full object-cover hover:scale-110 transition-transform duration-700" loading="lazy" /></div>
+            <div class="rounded-2xl overflow-hidden h-32"><img src="https://images.pexels.com/photos/3916766/pexels-photo-3916766.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Dumbbell rack" class="w-full h-full object-cover hover:scale-110 transition-transform duration-700" loading="lazy" /></div>
+          </div>
+          <div class="space-y-4 pt-12">
+            <div class="rounded-2xl overflow-hidden h-32"><img src="https://images.pexels.com/photos/12250460/pexels-photo-12250460.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Cardio zone" class="w-full h-full object-cover hover:scale-110 transition-transform duration-700" loading="lazy" /></div>
+            <div class="rounded-2xl overflow-hidden h-48"><img src="https://images.pexels.com/photos/7187951/pexels-photo-7187951.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Battle ropes" class="w-full h-full object-cover hover:scale-110 transition-transform duration-700" loading="lazy" /></div>
+          </div>
+        </div>
+      </div>
+      <!-- Timings -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="reveal delay-100 flex items-center gap-5 rounded-2xl bg-[#131316] border border-white/10 p-6 hover:border-[#e63946]/50 transition-colors">
+          <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-[#e63946] to-[#f4a261] flex items-center justify-center flex-shrink-0"><i data-lucide="users" class="w-7 h-7 text-white"></i></div>
+          <div><h4 class="text-xl font-bold text-white mb-1 flex items-center gap-2"><i data-lucide="clock" class="w-4 h-4 text-[#e63946]"></i>Men Timing</h4><p class="text-gray-400">5:00 AM – 9:00 AM &amp; 5:00 PM – 10:00 PM</p></div>
+        </div>
+        <div class="reveal delay-300 flex items-center gap-5 rounded-2xl bg-[#131316] border border-white/10 p-6 hover:border-[#e63946]/50 transition-colors">
+          <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-[#e63946] to-[#f4a261] flex items-center justify-center flex-shrink-0"><i data-lucide="users" class="w-7 h-7 text-white"></i></div>
+          <div><h4 class="text-xl font-bold text-white mb-1 flex items-center gap-2"><i data-lucide="clock" class="w-4 h-4 text-[#e63946]"></i>Women Timing</h4><p class="text-gray-400">9:00 AM – 5:00 PM (Ladies-only session)</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== TRAINERS ===== -->
+  <section id="trainers" class="relative py-24 md:py-32 bg-[#0a0a0b]">
+    <div class="max-w-7xl mx-auto px-6">
+      <div class="text-center mb-16">
+        <h2 class="reveal text-4xl md:text-6xl font-extrabold text-white heading-underline">Meet the <span class="gradient-text">Trainers</span></h2>
+        <p class="reveal delay-200 mt-6 text-gray-400 max-w-2xl mx-auto text-lg">Certified, experienced, and passionate — our team is the heart of HP4.</p>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-20">
+        <!-- Trainer 1 -->
+        <div class="reveal delay-100 group relative rounded-3xl overflow-hidden bg-[#131316] border border-white/5">
+          <div class="relative h-80 overflow-hidden">
+            <img src="https://images.pexels.com/photos/13211450/pexels-photo-13211450.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Rajesh Kumar" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy" />
+            <div class="absolute inset-0 bg-gradient-to-t from-[#131316] via-[#131316]/30 to-transparent"></div>
+            <div class="absolute top-4 right-4 px-3 py-1.5 rounded-full bg-[#e63946]/90 backdrop-blur-sm text-white text-xs font-bold">12+ years</div>
+          </div>
+          <div class="p-6"><h3 class="text-xl font-bold text-white group-hover:text-[#e63946] transition-colors">Rajesh Kumar</h3><p class="text-[#f4a261] text-sm font-medium mb-3">Head Strength Coach</p><p class="text-gray-400 text-sm leading-relaxed">National-level powerlifter and certified strength specialist. Rajesh designs programs focused on progressive overload and injury prevention.</p></div>
+        </div>
+        <!-- Trainer 2 -->
+        <div class="reveal delay-200 group relative rounded-3xl overflow-hidden bg-[#131316] border border-white/5">
+          <div class="relative h-80 overflow-hidden">
+            <img src="https://images.pexels.com/photos/31245340/pexels-photo-31245340.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Priya Sharma" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy" />
+            <div class="absolute inset-0 bg-gradient-to-t from-[#131316] via-[#131316]/30 to-transparent"></div>
+            <div class="absolute top-4 right-4 px-3 py-1.5 rounded-full bg-[#e63946]/90 backdrop-blur-sm text-white text-xs font-bold">8+ years</div>
+          </div>
+          <div class="p-6"><h3 class="text-xl font-bold text-white group-hover:text-[#e63946] transition-colors">Priya Sharma</h3><p class="text-[#f4a261] text-sm font-medium mb-3">Functional Fitness</p><p class="text-gray-400 text-sm leading-relaxed">CrossFit Level 2 coach with a passion for kettlebell training and mobility work. Priya helps clients build functional strength that translates to everyday life.</p></div>
+        </div>
+        <!-- Trainer 3 -->
+        <div class="reveal delay-300 group relative rounded-3xl overflow-hidden bg-[#131316] border border-white/5">
+          <div class="relative h-80 overflow-hidden">
+            <img src="https://images.pexels.com/photos/29886673/pexels-photo-29886673.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Arjun Mehta" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy" />
+            <div class="absolute inset-0 bg-gradient-to-t from-[#131316] via-[#131316]/30 to-transparent"></div>
+            <div class="absolute top-4 right-4 px-3 py-1.5 rounded-full bg-[#e63946]/90 backdrop-blur-sm text-white text-xs font-bold">10+ years</div>
+          </div>
+          <div class="p-6"><h3 class="text-xl font-bold text-white group-hover:text-[#e63946] transition-colors">Arjun Mehta</h3><p class="text-[#f4a261] text-sm font-medium mb-3">Bodybuilding Coach</p><p class="text-gray-400 text-sm leading-relaxed">IFBB Pro card holder and competition prep specialist. Arjun has coached over 50 amateur bodybuilders to podium finishes.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== TRAINER SPOTLIGHT ===== -->
+  <section class="relative py-24 md:py-32 bg-gradient-to-b from-[#0a0a0b] via-[#131316] to-[#0a0a0b] overflow-hidden">
+    <div class="absolute top-1/4 -right-32 w-96 h-96 rounded-full bg-[#e63946]/5 blur-3xl"></div>
+    <div class="absolute bottom-1/4 -left-32 w-96 h-96 rounded-full bg-[#f4a261]/5 blur-3xl"></div>
+    <div class="max-w-7xl mx-auto px-6 relative z-10">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+        <!-- Image -->
+        <div class="reveal-left relative">
+          <div class="spotlight-img relative rounded-3xl overflow-hidden border-2 border-[#e63946]/20">
+            <img src="https://images.pexels.com/photos/6455906/pexels-photo-6455906.jpeg?auto=compress&cs=tinysrgb&w=1000" alt="Trainer guiding client through exercise" class="w-full h-[500px] object-cover" loading="lazy" />
+            <div class="absolute inset-0 bg-gradient-to-t from-[#0a0a0b]/60 to-transparent"></div>
+            <div class="absolute bottom-6 left-6 right-6 flex items-center gap-4 rounded-2xl bg-[#0a0a0b]/80 backdrop-blur-md p-4 border border-white/10">
+              <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-[#e63946] to-[#ff2d4a] flex items-center justify-center flex-shrink-0"><i data-lucide="dumbbell" class="w-6 h-6 text-white"></i></div>
+              <div><p class="text-white font-bold text-sm">One-on-One Coaching</p><p class="text-gray-400 text-xs">Personalized form correction &amp; motivation</p></div>
+            </div>
+          </div>
+          <div class="absolute -top-4 -left-4 w-24 h-24 border-2 border-[#e63946]/30 rounded-2xl -z-10"></div>
+          <div class="absolute -bottom-4 -right-4 w-32 h-32 border-2 border-[#f4a261]/20 rounded-3xl -z-10"></div>
+        </div>
+        <!-- Text -->
+        <div class="reveal-right">
+          <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#e63946]/10 border border-[#e63946]/30 mb-6">
+            <i data-lucide="flame" class="w-4 h-4 text-[#e63946]"></i>
+            <span class="text-[#e63946] text-sm font-semibold tracking-wide">TRAINER SPOTLIGHT</span>
+          </div>
+          <h2 class="text-3xl md:text-5xl font-extrabold text-white mb-4">Rajesh <span class="gradient-text">Kumar</span></h2>
+          <p class="text-[#f4a261] text-lg font-medium mb-6">Head Strength Coach &amp; Founder</p>
+          <p class="text-gray-300 leading-relaxed mb-4">With over 12 years of experience in strength sports and conditioning, Rajesh has built HP4 from the ground up — a gym that reflects his philosophy of training smart, training hard, and training for life.</p>
+          <p class="text-gray-400 leading-relaxed mb-8">As a national-level powerlifter, he understands what it takes to push past plateaus. His hands-on approach means every rep is watched, every set is tracked, and every client gets the attention they deserve. Whether you're a first-timer or a seasoned lifter, Rajesh will meet you where you are and take you further than you thought possible.</p>
+          <div class="grid grid-cols-3 gap-4">
+            <div class="text-center rounded-2xl bg-[#131316] border border-white/10 p-5 hover:border-[#e63946]/50 transition-colors">
+              <i data-lucide="award" class="w-6 h-6 text-[#e63946] mx-auto mb-2"></i>
+              <div class="text-2xl font-extrabold text-white">12+</div>
+              <div class="text-xs text-gray-400 mt-1">Years Coaching</div>
+            </div>
+            <div class="text-center rounded-2xl bg-[#131316] border border-white/10 p-5 hover:border-[#e63946]/50 transition-colors">
+              <i data-lucide="target" class="w-6 h-6 text-[#e63946] mx-auto mb-2"></i>
+              <div class="text-2xl font-extrabold text-white">500+</div>
+              <div class="text-xs text-gray-400 mt-1">Clients Transformed</div>
+            </div>
+            <div class="text-center rounded-2xl bg-[#131316] border border-white/10 p-5 hover:border-[#e63946]/50 transition-colors">
+              <i data-lucide="flame" class="w-6 h-6 text-[#e63946] mx-auto mb-2"></i>
+              <div class="text-2xl font-extrabold text-white">50+</div>
+              <div class="text-xs text-gray-400 mt-1">Competition Wins</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== CONTACT ===== -->
+  <section id="contact" class="relative py-24 md:py-32 bg-[#0a0a0b] overflow-hidden">
+    <div class="absolute inset-0 opacity-5" style="background-image: linear-gradient(rgba(230,57,70,0.3) 1px, transparent 1px), linear-gradient(90deg, rgba(230,57,70,0.3) 1px, transparent 1px); background-size: 50px 50px;"></div>
+    <div class="max-w-7xl mx-auto px-6 relative z-10">
+      <div class="text-center mb-16">
+        <h2 class="reveal text-4xl md:text-6xl font-extrabold text-white heading-underline">Get in <span class="gradient-text">Touch</span></h2>
+        <p class="reveal delay-200 mt-6 text-gray-400 max-w-2xl mx-auto text-lg">Ready to start? Visit us, call us, or drop a message — we're here to help you begin.</p>
+      </div>
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+        <!-- Left: contact details -->
+        <div class="reveal-left space-y-6">
+          <!-- Phone -->
+          <div class="group flex items-start gap-5 rounded-2xl bg-[#131316] border border-white/10 p-6 hover:border-[#e63946]/50 transition-all">
+            <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-[#e63946] to-[#ff2d4a] flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform duration-300"><i data-lucide="phone" class="w-7 h-7 text-white"></i></div>
+            <div>
+              <h3 class="text-lg font-bold text-white mb-1">Phone</h3>
+              <p class="text-gray-400 text-sm mb-1">Give us a call</p>
+              <a href="tel:+919876543210" class="text-gray-300 hover:text-[#e63946] transition-colors text-lg font-medium">+91 98765 43210</a><br>
+              <a href="tel:+914012345678" class="text-gray-400 hover:text-[#e63946] transition-colors text-sm">+91 40 1234 5678</a>
+            </div>
+          </div>
+          <!-- Address -->
+          <div class="group flex items-start gap-5 rounded-2xl bg-[#131316] border border-white/10 p-6 hover:border-[#e63946]/50 transition-all">
+            <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-[#f4a261] to-[#e63946] flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform duration-300"><i data-lucide="map-pin" class="w-7 h-7 text-white"></i></div>
+            <div>
+              <h3 class="text-lg font-bold text-white mb-1">Address</h3>
+              <p class="text-gray-400 text-sm mb-2">Find us here</p>
+              <p class="text-gray-300 leading-relaxed">HP4 Fitness &amp; Performance<br>Plot 42, Hitech City Road<br>Madhapur, Hyderabad<br>Telangana 500081, India</p>
+            </div>
+          </div>
+          <!-- Email + Hours -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            <div class="group flex flex-col items-start gap-3 rounded-2xl bg-[#131316] border border-white/10 p-6 hover:border-[#e63946]/50 transition-all">
+              <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-[#e63946] to-[#ff2d4a] flex items-center justify-center group-hover:scale-110 transition-transform duration-300"><i data-lucide="mail" class="w-6 h-6 text-white"></i></div>
+              <div><h3 class="text-sm font-bold text-white mb-1">Email</h3><a href="mailto:info@hp4fitness.com" class="text-gray-400 hover:text-[#e63946] transition-colors text-sm">info@hp4fitness.com</a></div>
+            </div>
+            <div class="group flex flex-col items-start gap-3 rounded-2xl bg-[#131316] border border-white/10 p-6 hover:border-[#e63946]/50 transition-all">
+              <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-[#f4a261] to-[#e63946] flex items-center justify-center group-hover:scale-110 transition-transform duration-300"><i data-lucide="clock" class="w-6 h-6 text-white"></i></div>
+              <div><h3 class="text-sm font-bold text-white mb-1">Open</h3><p class="text-gray-400 text-sm">Mon – Sun</p><p class="text-gray-300 text-sm">5:00 AM – 10:00 PM</p></div>
+            </div>
+          </div>
+          <!-- Social -->
+          <div class="flex items-center gap-4 pt-2">
+            <span class="text-gray-400 text-sm">Follow us:</span>
+            <a href="#" class="w-10 h-10 rounded-full bg-[#131316] border border-white/10 flex items-center justify-center hover:bg-[#e63946] hover:border-[#e63946] transition-all duration-300" aria-label="Instagram"><i data-lucide="instagram" class="w-5 h-5 text-white"></i></a>
+            <a href="#" class="w-10 h-10 rounded-full bg-[#131316] border border-white/10 flex items-center justify-center hover:bg-[#e63946] hover:border-[#e63946] transition-all duration-300" aria-label="Facebook"><i data-lucide="facebook" class="w-5 h-5 text-white"></i></a>
+            <a href="#" class="w-10 h-10 rounded-full bg-[#131316] border border-white/10 flex items-center justify-center hover:bg-[#e63946] hover:border-[#e63946] transition-all duration-300" aria-label="YouTube"><i data-lucide="youtube" class="w-5 h-5 text-white"></i></a>
+          </div>
+        </div>
+        <!-- Right: form -->
+        <div class="reveal-right">
+          <div class="rounded-3xl bg-[#131316] border border-white/10 p-8">
+            <h3 class="text-2xl font-bold text-white mb-2">Send a Message</h3>
+            <p class="text-gray-400 text-sm mb-6">We'll get back to you within 24 hours.</p>
+            <form class="space-y-4" onsubmit="event.preventDefault(); alert('Thank you! We will get back to you soon.'); this.reset();">
+              <div><label class="block text-sm text-gray-400 mb-1.5">Your Name</label><input type="text" required class="w-full px-4 py-3 rounded-xl bg-[#0a0a0b] border border-white/10 text-white placeholder-gray-600 focus:border-[#e63946] focus:outline-none transition-colors" placeholder="John Doe" /></div>
+              <div><label class="block text-sm text-gray-400 mb-1.5">Phone Number</label><input type="tel" required class="w-full px-4 py-3 rounded-xl bg-[#0a0a0b] border border-white/10 text-white placeholder-gray-600 focus:border-[#e63946] focus:outline-none transition-colors" placeholder="+91 98765 43210" /></div>
+              <div><label class="block text-sm text-gray-400 mb-1.5">Interested In</label><select required class="w-full px-4 py-3 rounded-xl bg-[#0a0a0b] border border-white/10 text-white focus:border-[#e63946] focus:outline-none transition-colors"><option value="" disabled selected>Select a plan</option><option value="basic">Basic Membership</option><option value="premium">Premium Membership</option><option value="elite">Elite Membership</option><option value="trial">Free Trial</option></select></div>
+              <div><label class="block text-sm text-gray-400 mb-1.5">Message</label><textarea rows="3" class="w-full px-4 py-3 rounded-xl bg-[#0a0a0b] border border-white/10 text-white placeholder-gray-600 focus:border-[#e63946] focus:outline-none transition-colors resize-none" placeholder="Tell us about your fitness goals..."></textarea></div>
+              <button type="submit" class="w-full py-3.5 rounded-xl bg-gradient-to-r from-[#e63946] to-[#ff2d4a] text-white font-semibold hover:shadow-lg hover:shadow-[#e63946]/40 transition-all duration-300 hover:scale-[1.02]">Send Message</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="bg-[#060607] border-t border-white/5 py-10">
+    <div class="max-w-7xl mx-auto px-6">
+      <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+        <div class="flex items-center gap-2">
+          <div class="w-10 h-10 rounded-full bg-gradient-to-br from-[#e63946] to-[#f4a261] flex items-center justify-center"><i data-lucide="dumbbell" class="w-5 h-5 text-white"></i></div>
+          <span class="text-2xl font-extrabold text-white">HP<span class="text-[#e63946]">4</span></span>
+        </div>
+        <nav class="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm text-gray-400">
+          <a href="#hero" class="hover:text-[#e63946] transition-colors">Home</a>
+          <a href="#equipment" class="hover:text-[#e63946] transition-colors">Equipment</a>
+          <a href="#gallery" class="hover:text-[#e63946] transition-colors">Gallery</a>
+          <a href="#membership" class="hover:text-[#e63946] transition-colors">Membership</a>
+          <a href="#trainers" class="hover:text-[#e63946] transition-colors">Trainers</a>
+          <a href="#contact" class="hover:text-[#e63946] transition-colors">Contact</a>
+        </nav>
+        <p class="text-gray-500 text-sm text-center md:text-right">© 2026 HP4 Fitness. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ===== JAVASCRIPT ===== -->
+  <script>
+    // --- Gallery images injected dynamically ---
+    const galleryImages1 = [
+      'https://images.pexels.com/photos/6389516/pexels-photo-6389516.jpeg?auto=compress&cs=tinysrgb&w=800',
+      'https://images.pexels.com/photos/6389893/pexels-photo-6389893.jpeg?auto=compress&cs=tinysrgb&w=800',
+      'https://images.pexels.com/photos/5497493/pexels-photo-5497493.jpeg?auto=compress&cs=tinysrgb&w=800',
+      'https://images.pexels.com/photos/6388373/pexels-photo-6388373.jpeg?auto=compress&cs=tinysrgb&w=800',
+      'https://images.pexels.com/photos/32695892/pexels-photo-32695892.jpeg?auto=compress&cs=tinysrgb&w=800',
+      'https://images.pexels.com/photos/4753885/pexels-photo-4753885.jpeg?auto=compress&cs=tinysrgb&w=800',
+    ];
+    const galleryImages2 = [
+      'https://images.pexels.com/photos/3916766/pexels-photo-3916766.jpeg?auto=compress&cs=tinysrgb&w=800',
+      'https://images.pexels.com/photos/7188069/pexels-photo-7188069.jpeg?auto=compress&cs=tinysrgb&w=800',
+      'https://images.pexels.com/photos/32695895/pexels-photo-32695895.jpeg?auto=compress&cs=tinysrgb&w=800',
+      'https://images.pexels.com/photos/17840/pexels-photo.jpg?auto=compress&cs=tinysrgb&w=800',
+      'https://images.pexels.com/photos/4720804/pexels-photo-4720804.jpeg?auto=compress&cs=tinysrgb&w=800',
+      'https://images.pexels.com/photos/3888343/pexels-photo-3888343.jpeg?auto=compress&cs=tinysrgb&w=800',
+    ];
+
+    function createSlide(img, idx) {
+      const div = document.createElement('div');
+      div.className = 'relative flex-shrink-0 w-[340px] h-[240px] md:w-[480px] md:h-[300px] rounded-2xl overflow-hidden group border border-white/5';
+      div.style.marginRight = '24px';
+      div.innerHTML = '<img src="' + img + '" alt="Gym view ' + (idx + 1) + '" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy" />' +
+        '<div class="absolute inset-0 bg-gradient-to-t from-[#0a0a0b]/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>';
+      return div;
+    }
+
+    const row1 = document.getElementById('slideRow1');
+    [...galleryImages1, ...galleryImages1].forEach((img, i) => row1.appendChild(createSlide(img, i)));
+
+    const row2 = document.getElementById('slideRow2');
+    [...galleryImages2, ...galleryImages2].forEach((img, i) => row2.appendChild(createSlide(img, i)));
+
+    // --- Navbar scroll effect ---
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', function() {
+      if (window.scrollY > 60) {
+        navbar.classList.remove('py-5');
+        navbar.classList.add('py-3', 'bg-[#0a0a0b]/95', 'backdrop-blur-md', 'shadow-lg', 'shadow-black/50');
+      } else {
+        navbar.classList.add('py-5');
+        navbar.classList.remove('py-3', 'bg-[#0a0a0b]/95', 'backdrop-blur-md', 'shadow-lg', 'shadow-black/50');
+      }
+    });
+
+    // --- Mobile menu toggle ---
+    const menuBtn = document.getElementById('menuBtn');
+    const mobileMenu = document.getElementById('mobileMenu');
+    let menuOpen = false;
+    menuBtn.addEventListener('click', function() {
+      menuOpen = !menuOpen;
+      mobileMenu.classList.toggle('hidden');
+      menuBtn.innerHTML = menuOpen
+        ? '<i data-lucide="x" class="w-6 h-6 text-white"></i>'
+        : '<i data-lucide="menu" class="w-6 h-6 text-white"></i>';
+      lucide.createIcons();
+    });
+    document.querySelectorAll('.mobile-link').forEach(function(link) {
+      link.addEventListener('click', function() {
+        menuOpen = false;
+        mobileMenu.classList.add('hidden');
+        menuBtn.innerHTML = '<i data-lucide="menu" class="w-6 h-6 text-white"></i>';
+        lucide.createIcons();
+      });
+    });
+
+    // --- Scroll reveal with IntersectionObserver ---
+    const observer = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.15, rootMargin: '0px 0px -50px 0px' });
+
+    document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale').forEach(function(el) {
+      observer.observe(el);
+    });
+
+    // --- Initialize Lucide icons ---
+    lucide.createIcons();
+  </script>
+</body>
+</html>
